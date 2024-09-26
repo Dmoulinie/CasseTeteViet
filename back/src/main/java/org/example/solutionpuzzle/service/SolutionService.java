@@ -3,6 +3,7 @@ package org.example.solutionpuzzle.service;
 import org.example.solutionpuzzle.entity.Solution;
 import org.example.solutionpuzzle.repository.SolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,14 @@ public class SolutionService {
         return false;
     }
 
+
+    public static double calculateEquation(int A, int B, int C, int D, int E, int F, int G, int H, int I) {
+        if (C != 0 && I != 0) { // Assurer que C et I ne soient pas 0 pour éviter la division par zéro
+            return A + (13.0 * B / C) + D + (12.0 * E) - F - 11 + (1.0 * G * H / I) - 10;
+        }
+        return 0;
+    }
+
     // Fonction principale pour générer les permutations et tester l'équation
     public static List<Solution> findSolutions() {
         int[] digits = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -30,17 +39,18 @@ public class SolutionService {
         // Obtenir toutes les permutations des chiffres 1 à 9
         permute(digits, 0, solutions);
 
-        System.out.println("Nombre de solutions: " + solutions.size());
-        for (int[] solution : solutions) {
-            System.out.printf("A=%d, B=%d, C=%d, D=%d, E=%d, F=%d, G=%d, H=%d, I=%d\n",
-                    solution[0], solution[1], solution[2], solution[3], solution[4],
-                    solution[5], solution[6], solution[7], solution[8]);
-        }
+//        System.out.println("Nombre de solutions: " + solutions.size());
+//        for (int[] solution : solutions) {
+//            System.out.printf("A=%d, B=%d, C=%d, D=%d, E=%d, F=%d, G=%d, H=%d, I=%d\n",
+//                    solution[0], solution[1], solution[2], solution[3], solution[4],
+//                    solution[5], solution[6], solution[7], solution[8]);
+//        }
         // Transformer les solutions en objets Solution
         List<Solution> solutionList = new ArrayList<>();
         for (int[] solution : solutions) {
             Solution s = new Solution();
             s.setGrid(Arrays.toString(solution));
+            System.out.println(Arrays.toString(solution));
             s.setStatus("correct");
             solutionList.add(s);
         }
@@ -82,8 +92,17 @@ public class SolutionService {
         return solutionRepository.findById(id);
     }
 
-    public Solution saveSolution(Solution solution) {
-        return solutionRepository.save(solution);
+    public Long getLastId() {
+        return solutionRepository.findTopByOrderByIdDesc().map(Solution::getId).orElse(0L);
+    }
+
+    public void saveSolution(Solution solution) {
+        System.out.println("Checking existence for GRID: " + solution.getGrid());
+        if (!solutionRepository.existsByGrid(solution.getGrid())) {
+            solutionRepository.save(solution);
+        } else {
+            System.out.println("The GRID value already exists.");
+        }
     }
 
     public void deleteSolutionById(Long id) {

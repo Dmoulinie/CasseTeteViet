@@ -1,1 +1,122 @@
-  <p>casse-tete works!</p>
+<div id="main">
+  <div>
+    <h1 class="text-center">Casse-tête</h1>
+    <p class="text-center">Ce casse-tête vietnamien a fait le tour d’internet en 2015. Donné initialement à des enfants de CE2,
+      des internautes se sont remués les méninges pour tenter de le résoudre. Y parviendrez-vous ?</p>
+  </div>
+  <div class="grid-container">
+
+    <!-- Ligne 1 -->
+    <div class="row">
+      <div class="grid-box">
+        <input type="number" id="1" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(0)">
+      </div>
+      <div class="grid-box disabled-grid-box">2</div>
+      <div class="grid-box">
+        <input type="number" id="5" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(4)">
+      </div>
+      <div class="grid-box operator-text">-</div>
+      <div class="grid-box">
+        <input type="number" id="6" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(5)">
+      </div>
+      <div class="grid-box disabled-grid-box">6</div>
+      <div class="grid-box grid-text">66</div>
+    </div>
+
+    <!-- Ligne 2-->
+    <div class="row">
+      <div class="grid-box operator-text">+</div>
+      <div class="grid-box disabled-grid-box">9</div>
+      <div class="grid-box operator-text">x</div>
+      <div class="grid-box disabled-grid-box">11</div>
+      <div class="grid-box operator-text">-</div>
+      <div class="grid-box disabled-grid-box">13</div>
+      <div class="grid-box operator-text">=</div>
+    </div>
+
+    <!-- Ligne 3-->
+    <div class="row">
+      <div class="grid-box grid-text">13</div>
+      <div class="grid-box disabled-grid-box">16</div>
+      <div class="grid-box grid-text">12</div>
+      <div class="grid-box disabled-grid-box">18</div>
+      <div class="grid-box grid-text">11</div>
+      <div class="grid-box disabled-grid-box">20</div>
+      <div class="grid-box grid-text">10</div>
+    </div>
+
+    <!-- Ligne 4-->
+    <div class="row">
+      <div class="grid-box operator-text">x</div>
+      <div class="disabled-grid-box">23</div>
+      <div class="grid-box operator-text">+</div>
+      <div class="grid-box disabled-grid-box">25</div>
+      <div class="grid-box operator-text">+</div>
+      <div class="grid-box disabled-grid-box">27</div>
+      <div class="grid-box operator-text">-</div>
+    </div>
+
+    <!-- Ligne 5-->
+    <div class="row">
+      <div class="grid-box">
+        <input type="number" id="2" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(1)">
+      </div>
+      <div class="grid-box disabled-grid-box">30</div>
+      <div class="grid-box">
+        <input type="number" id="4" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(3)">
+      </div>
+      <div class="grid-box disabled-grid-box">32</div>
+      <div class="grid-box">
+        <input type="number" id="7" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(6)">
+      </div>
+      <div class="grid-box disabled-grid-box">34</div>
+      <div class="grid-box">
+        <input type="number" id="9" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(8)">
+      </div>
+    </div>
+
+    <!-- Ligne 6-->
+    <div class="row">
+      <div class="grid-box operator-text">:</div>
+      <div class="grid-box">
+        <input type="number" id="3" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(2)">
+      </div>
+      <div class="grid-box operator-text">+</div>
+      <div class="grid-box disabled-grid-box">39</div>
+      <div class="grid-box operator-text">x</div>
+      <div class="grid-box">
+        <input type="number" id="8" class="grid-value" maxlength="1" min="1" max="9" (input)="validateInput($event)" [ngClass]="getInputClass(7)">
+      </div>
+      <div class="grid-box operator-text">:</div>
+    </div>
+  </div>
+
+  <div *ngIf="!isComplete()" class="alert alert-primary alert-custom">
+    <p class="text-center">Remplissez les cases pour résoudre le casse-tête.</p>
+  </div>
+
+  <div *ngIf="isComplete() && !isvalid && !areTwoValuesEqual" class="alert alert-danger alert-custom">
+    <p class="text-center">La solution est incorrecte !<br>
+      {{this.values[0]}} + (13 * {{this.values[1]}} / {{this.values[2]}}) + {{this.values[3]}} + (12 * {{this.values[4]}}) - {{this.values[5]}} - 11 + ({{this.values[6]}} * {{this.values[7]}} / {{this.values[8]}}) - 10 = {{this.resultEquation}}
+    </p>
+  </div>
+
+  <div *ngIf="isComplete() && areTwoValuesEqual" class="alert alert-warning alert-custom">
+    <p class="text-center">Deux valeurs sont égales !</p>
+  </div>
+
+  <div *ngIf="isComplete() && isvalid && !areTwoValuesEqual"class="alert alert-success alert-custom">
+    <p class="text-center xxl">La solution est correcte !<br>
+    {{this.values[0]}} + (13 * {{this.values[1]}} / {{this.values[2]}}) + {{this.values[3]}} + (12 * {{this.values[4]}}) - {{this.values[5]}} - 11 + ({{this.values[6]}} * {{this.values[7]}} / {{this.values[8]}}) - 10 = {{this.resultEquation}}
+    </p>
+  </div>
+
+
+
+  <!--   Actions   -->
+  <div class="actions-casse-tete flex-row">
+    <button ngbTooltip="Efface le contenu des cases" class="btn btn-danger" (click)="resetCalcul()">Réinitialiser</button>
+    <button ngbTooltip="Sauvegarde la solution actuelle" class="btn btn-primary" (click)="saveSolution()">Sauvegarder</button>
+  </div>
+</div>
+

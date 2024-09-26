@@ -21,25 +21,48 @@
           <div class="card">
             <div class="card-body">
               <div class="container-actions">
-                <h5 class="card-title">Solution {{ solution.id }}</h5>
+                <div class="flex-row">
+                  <div class="title-and-status">
+                    <h5 class="card-title">Solution {{ solution.id }}</h5>
+                    <svg ngbTooltip="Solution Correcte" *ngIf="solution.status == 'correct'" style="color:green; margin-bottom: 5px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                      <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0"/>
+                      <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+                    </svg>
+                    <svg ngbTooltip="Solution Incorrecte" *ngIf="solution.status == 'incorrect'" style="color:red; margin-bottom: 5px" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                  </svg>
+                    <!--   Edit Button-->
+                    <button ngbTooltip="Modifier la solution" class="btn action-button" style="margin-bottom: 10px" (click)="deleteSolution(solution.id)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div>
+                    <p class="card-text">{{ solution.grid }}</p>
+                  </div>
+                </div>
+
                 <!-- Bouton Supprimer -->
                 <div class="actions">
-                  <button class="btn btn-info action-button disabled">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-                    </svg>
-                  </button>
-
-                  <button class="btn btn-danger action-button" (click)="deleteSolution(solution.id)">
+                  <button ngbTooltip="Supprimer la solution" class="btn btn-danger action-button" (click)="deleteSolution(solution.id)">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                       <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                       <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                     </svg>
                   </button>
+                  <button ngbTooltip="Visualiser la solution"  class="btn btn-info action-button" (click)="sendDataToCasseTete(solution,'showSolution')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                    </svg>
+                  </button>
+
 
                 </div>
               </div>
-              <p class="card-text">{{ solution.grid }}</p>
+
             </div>
 
           </div>
@@ -55,16 +78,15 @@
     </div>
     <div class="generated-infos flex-column">
 <!--      <p *ngIf="generatedAllSolutions" id="timeGenerated">Les solutions ont été générées en 17 ms</p>-->
-      <p id="timeGenerated" class="small text-center">Les solutions ont été générées en 17 ms</p>
+      <p id="timeGenerated" class="small text-center" *ngIf="generatedAllSolutions">Les solutions ont été générées en {{ timeElapsed }} ms !</p>
       <div class="generated-actions">
-        <button class="btn btn-primary generate-button" (click)="generateAllSolutions()">
+        <button  ngbTooltip="Génere toutes les solutions possibles au casse-tête" class="btn btn-primary generate-button" (click)="generateAllSolutions()">
           Tout générer
         </button>
-        <button class="btn btn-danger generate-button" (click)="deleteAllSolutions()">
+        <button ngbTooltip="Supprime l'intégralité des solutions" class="btn btn-danger generate-button" (click)="deleteAllSolutions()">
           Tout supprimer
         </button>
-
-
+      </div>
     </div>
   </div>
 </div>
