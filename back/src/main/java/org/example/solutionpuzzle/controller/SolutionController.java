@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/solutions")
@@ -15,25 +18,27 @@ public class SolutionController {
     @Autowired
     private SolutionService solutionService;
 
-    @PostMapping("/generate")
+
+    @GetMapping("/generate")
     public ResponseEntity<List<Solution>> generateSolutions() {
+        //calcule time to generate solutions
         List<Solution> solutions = SolutionService.findSolutions();
         solutionService.saveAll(solutions);
         return ResponseEntity.ok(solutions);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/get/all")
     public List<Solution> getAllSolutions() {
         return solutionService.getAllSolutions();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Solution> getSolution(@PathVariable Long id) {
         Optional<Solution> solution = solutionService.getSolutionById(id);
         return solution.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<Solution> updateSolution(@PathVariable Long id, @RequestBody Solution updatedSolution) {
         Optional<Solution> existingSolution = solutionService.getSolutionById(id);
         if (existingSolution.isPresent()) {
@@ -46,7 +51,7 @@ public class SolutionController {
         return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteSolution(@PathVariable Long id) {
         solutionService.deleteSolutionById(id);
         return ResponseEntity.ok().build();

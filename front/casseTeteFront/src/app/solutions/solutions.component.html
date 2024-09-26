@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row ">
+    <div class="col-md-12">
+      <h1>Solutions</h1>
+      <p>Voici les solutions des casse-têtes</p>
+    </div>
+
+    <!-- Search bar -->
+    <div class="col-md-12 my-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Filtrer les solutions"
+        [(ngModel)]="searchTerm"
+      />
+    </div>
+
+    <div class="col-md-12 scrollable-container">
+      <div class="row" *ngIf="filteredSolutions && filteredSolutions.length > 0; else noSolutions">
+        <div class="col-md-12" *ngFor="let solution of filteredSolutions">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Solution {{ solution.id }}</h5>
+              <p class="card-text">{{ solution.grid }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #noSolutions>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="text-center">Aucune solution n'a été générée</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="generated-infos flex-column">
+<!--      <p *ngIf="generatedAllSolutions" id="timeGenerated">Les solutions ont été générées en 17 ms</p>-->
+      <p id="timeGenerated" class="small text-center">Les solutions ont été générées en 17 ms</p>
+      <button class="btn btn-primary generate-button" (click)="generateAllSolutions()">
+        Générer toutes les solutions
+      </button>
+    </div>
+  </div>
+</div>
