@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -19,11 +17,42 @@ public class SolutionController {
     private SolutionService solutionService;
 
     @GetMapping("/generate")
-    public ResponseEntity<List<Solution>> generateSolutions() {
-        //TODO : calculer le temps execution
+    public ResponseEntity<Map<String, Object>> generateSolutions() {
+        // Start timing
+        long startTime = System.currentTimeMillis();
+
+        // Générer les solutions
         List<Solution> solutions = SolutionService.findSolutions();
         solutionService.saveAll(solutions);
-        return ResponseEntity.ok(solutions);
+
+        // Calculer le temps d'exécution
+        long endTime = System.currentTimeMillis();
+        long duration = (endTime - startTime);
+
+        // Permet d'envoyer les solutions et le temps d'exécution en tant que réponse
+        Map<String, Object> response = new HashMap<>();
+        response.put("solutions", solutions);
+        response.put("duration", duration);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Boolean> verifyEquation(@RequestBody List<Integer> numbers) {
+        return ResponseEntity.ok(SolutionService.verifyEquation(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5), numbers.get(6), numbers.get(7), numbers.get(8)));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Solution> addSolution(@RequestBody Solution solution) {
+
+        solutionService.saveSolution(solution);
+        return ResponseEntity.ok(solution);
+    }
+
+
+    @PostMapping("/calculate")
+    public ResponseEntity<Double> calculateEquation(@RequestBody List<Integer> numbers) {
+        return ResponseEntity.ok(SolutionService.calculateEquation(numbers.get(0), numbers.get(1), numbers.get(2), numbers.get(3), numbers.get(4), numbers.get(5), numbers.get(6), numbers.get(7), numbers.get(8)));
     }
 
     @GetMapping("/get/all")
@@ -36,6 +65,12 @@ public class SolutionController {
         Optional<Solution> solution = solutionService.getSolutionById(id);
         return solution.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/get/lastId")
+    public ResponseEntity<Long> getLastId() {
+        return ResponseEntity.ok(solutionService.getLastId());
+    }
+
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<Solution> updateSolution(@PathVariable Long id, @RequestBody Solution updatedSolution) {

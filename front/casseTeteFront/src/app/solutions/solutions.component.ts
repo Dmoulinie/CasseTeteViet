@@ -4,6 +4,7 @@ import {ApiService} from "../services/api-service.service";
 import {Solution} from "../../classes/Solution";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {DataSolutionsService} from "../services/data-solutions.service";
 
 @Component({
   selector: 'app-solutions',
@@ -18,28 +19,49 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './solutions.component.scss'
 })
 export class SolutionsComponent {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private dataSolutionsService: DataSolutionsService ) {}
+
+  // Donnée des solutions reçues
+  receivedData: any;
+
+
+
+  sendDataToCasseTete(solution: Solution, type: string) {
+    this.dataSolutionsService.sendData([solution, type]);
+  }
 
   generatedAllSolutions:boolean = false;
-
   solutions: Solution[] = [];
-
   searchTerm: string = ''; // Terme de recherche
-
+  timeElapsed: number = 0; // Temps écoulé
 
   ngOnInit() {
     this.apiService.getAllSolutions().subscribe((data: any[]) => {
       console.log(data);
       this.solutions = data;
     });
+
+    this.dataSolutionsService.data$.subscribe(data => {
+      if (!data) {
+        return;
+      }
+      this.receivedData = data;
+      console.log("received data" + this.receivedData);
+      if(this.receivedData[1] === 'addSolutionToList') {
+        this.saveSolution(this.receivedData[0]);
+      }
+    });
   }
 
   generateAllSolutions() {
-    //calculate to generate all solutions
-    this.apiService.generateAllSolutions().subscribe((data: any[]) => {
-
+    // Call API to generate all solutions
+    this.apiService.generateAllSolutions().subscribe((data: any) => {
       console.log("Generated all solutions");
-      this.solutions = data;
+      console.log(data);
+
+      // Access the 'duration' and 'solutions' properties of 'data'
+      this.timeElapsed = data.duration;
+      this.solutions = data.solutions;
       this.generatedAllSolutions = true;
     });
   }
@@ -54,6 +76,27 @@ export class SolutionsComponent {
     return this.solutions.filter(solution =>
       solution.grid.includes(this.searchTerm) // Vérifie si searchNumber fait partie de solution.grid
     );
+  }
+
+  // Méthode d'ajout de solution
+  saveSolution(solution: Solution) {
+    // Check si la solution est déjà dans la liste des solutions
+    if (this.solutions.some(s => s.grid === solution.grid)) {
+      return;
+    }
+    // Récupérer l'id de la dernière solution
+    if (this.solutions.length === 0) { // S'il n'y a pas de solutions dans la liste
+      solution.id = 1;
+      this.solutions.push(solution);
+      return;
+    }
+    const lastId = this.solutions[this.solutions.length - 1].id;
+    solution.id = lastId + 1;
+    this.solutions.push(solution);
+  }
+
+  editSolution(solution: Solution) {
+    this.dataSolutionsService.sendData([solution, 'editSolution']);
   }
 
 
