@@ -20,15 +20,15 @@ export class ApiService {
   }
 
   addSolution(post: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/posts`, post);
+    return this.http.post<any>(`${this.apiUrl}/add`, post);
   }
 
   updateSolution(id: number, post: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/posts/${id}`, post);
   }
 
-  deletePost(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/posts/${id}`);
+  deleteSolution(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/delete/${id}`);
   }
 
   generateAllSolutions(): Observable<any[]>{

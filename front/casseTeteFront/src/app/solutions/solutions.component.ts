@@ -56,4 +56,14 @@ export class SolutionsComponent {
     );
   }
 
+
+  // Méthode de suppression de solution
+  deleteSolution(solutionId: number) {
+    this.apiService.deleteSolution(solutionId).subscribe(() => {
+      // Supprimer la solution de la liste des solutions
+      this.solutions = this.solutions.filter(solution => solution.id !== solutionId);
+    });
+  }
+
+
 }
