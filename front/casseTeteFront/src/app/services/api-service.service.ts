@@ -31,6 +31,10 @@ export class ApiService {
     return this.http.delete<any>(`${this.apiUrl}/delete/${id}`);
   }
 
+  deleteAllSolutions(): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/delete/all`);
+  }
+
   generateAllSolutions(): Observable<any[]>{
     return this.http.get<any>(`${this.apiUrl}/generate`);
   }

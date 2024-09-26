@@ -56,9 +56,15 @@
     <div class="generated-infos flex-column">
 <!--      <p *ngIf="generatedAllSolutions" id="timeGenerated">Les solutions ont été générées en 17 ms</p>-->
       <p id="timeGenerated" class="small text-center">Les solutions ont été générées en 17 ms</p>
-      <button class="btn btn-primary generate-button" (click)="generateAllSolutions()">
-        Générer toutes les solutions
-      </button>
+      <div class="generated-actions">
+        <button class="btn btn-primary generate-button" (click)="generateAllSolutions()">
+          Tout générer
+        </button>
+        <button class="btn btn-danger generate-button" (click)="deleteAllSolutions()">
+          Tout supprimer
+        </button>
+
+
     </div>
   </div>
 </div>

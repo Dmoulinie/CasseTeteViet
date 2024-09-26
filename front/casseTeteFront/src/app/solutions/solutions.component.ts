@@ -65,5 +65,11 @@ export class SolutionsComponent {
     });
   }
 
+  deleteAllSolutions() {
+    this.apiService.deleteAllSolutions().subscribe(() => {
+      this.solutions = [];
+    });
+  }
+
 
 }

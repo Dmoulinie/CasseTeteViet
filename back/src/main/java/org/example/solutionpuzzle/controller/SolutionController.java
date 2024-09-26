@@ -18,10 +18,9 @@ public class SolutionController {
     @Autowired
     private SolutionService solutionService;
 
-
     @GetMapping("/generate")
     public ResponseEntity<List<Solution>> generateSolutions() {
-        //calcule time to generate solutions
+        //TODO : calculer le temps execution
         List<Solution> solutions = SolutionService.findSolutions();
         solutionService.saveAll(solutions);
         return ResponseEntity.ok(solutions);
@@ -57,9 +56,11 @@ public class SolutionController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteAllSolutions() {
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<?> deleteSolution() {
         solutionService.deleteAllSolutions();
+
         return ResponseEntity.ok().build();
     }
+
 }
