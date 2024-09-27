@@ -87,6 +87,16 @@ Voici les endpoints disponibles pour interagir avec l'application :
 - **DELETE** `/api/solutions/delete/all`: Supprime toutes les solutions enregistrées.  
   **Retourne:** Code 200 OK.
 
+
+## Todo
+
+- Quand tout supprimer, et tout générer il faut repartir de 0 (id)
+- Verifier les saisies de l'utilisateur lors des requetes API (sécurité)
+- Afficher le calcul de la solution meme si elle est n'est pas égal a 66 #Done
+- Vérifier que la solution n'éxiste pas déjà dans la base de donnée avant de la sauvegarder #Done
+- Afficher message d'erreur si la solution existe déjà dans la base de donnée
+
+
 ## Base de données
 Les solutions du casse-tête seront stockées dans une base de données H2 avec des fonctionnalités CRUD complètes pour la gestion des solutions.
 
