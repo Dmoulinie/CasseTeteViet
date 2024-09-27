@@ -3,6 +3,8 @@
 ## Contexte
 Ce projet est basé sur un célèbre casse-tête vietnamien qui a fait le tour d'internet en 2015. Initialement conçu pour des enfants de CE2, ce puzzle a également défié de nombreux internautes. L'objectif est de compléter un tableau en utilisant les chiffres de 1 à 9 sans les répéter.
 
+![Casse-tête Vietnamien](assets/casse-tete-viet.png)
+
 ## Énoncé du casse-tête
 Le but du jeu est de remplir un tableau en respectant les règles suivantes :
 - Utiliser les chiffres de 1 à 9.
