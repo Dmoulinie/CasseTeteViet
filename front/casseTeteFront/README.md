@@ -7,8 +7,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - Quand tout supprimer, et tout générer il faut repartir de 0 (id)
 - Verifier les saisies de l'utilisateur lors des requetes API (sécurité)
 - Afficher le calcul de la solution meme si elle est n'est pas égal a 66 #Done
-- Vérifier que la solution n'éxiste pas déjà dans la base de donnée avant de la sauvegarder
-- 
+- Vérifier que la solution n'éxiste pas déjà dans la base de donnée avant de la sauvegarder #Done
+- Afficher message d'erreur si la solution existe déjà dans la base de donnée
 
 
 ## Development server

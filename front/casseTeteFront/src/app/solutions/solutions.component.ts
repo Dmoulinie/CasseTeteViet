@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {ApiService} from "../services/api-service.service";
 import {Solution} from "../../classes/Solution";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {DataSolutionsService} from "../services/data-solutions.service";
 
@@ -13,7 +13,8 @@ import {DataSolutionsService} from "../services/data-solutions.service";
     NgbTooltip,
     NgForOf,
     NgIf,
-    FormsModule
+    FormsModule,
+    NgClass
   ],
   templateUrl: './solutions.component.html',
   styleUrl: './solutions.component.scss'
@@ -35,6 +36,9 @@ export class SolutionsComponent {
   searchTerm: string = ''; // Terme de recherche
   timeElapsed: number = 0; // Temps écoulé
 
+  isEditing: boolean = false;
+  solutionEditingId: number = 0;
+
   ngOnInit() {
     this.apiService.getAllSolutions().subscribe((data: any[]) => {
       console.log(data);
@@ -47,8 +51,14 @@ export class SolutionsComponent {
       }
       this.receivedData = data;
       console.log("received data" + this.receivedData);
-      if(this.receivedData[1] === 'addSolutionToList') {
+      if (this.receivedData[1] === 'addSolutionToList') {
         this.saveSolution(this.receivedData[0]);
+      }
+      if (this.receivedData[1] === 'editSolutionInList') {
+        this.editSolution(this.receivedData[0]);
+      }
+      if (this.receivedData[1] === 'cancelEdit') {
+        this.isEditing = false;
       }
     });
   }
@@ -96,9 +106,21 @@ export class SolutionsComponent {
   }
 
   editSolution(solution: Solution) {
+    // Trouver l'index de la solution à éditer
+    const index = this.solutions.findIndex(s => s.id === solution.id);
+    this.solutions[index] = solution;
+    this.isEditing = false;
+  }
+
+  SendDataEditSolution(solution: Solution) {
+    this.isEditing = true;
+    this.solutionEditingId = solution.id;
     this.dataSolutionsService.sendData([solution, 'editSolution']);
   }
 
+  isEditingChangeClass(solutionId: number) {
+    return this.isEditing && this.solutionEditingId === solutionId ? 'editing' : '';
+  }
 
   // Méthode de suppression de solution
   deleteSolution(solutionId: number) {
