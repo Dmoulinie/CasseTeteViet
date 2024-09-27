@@ -105,6 +105,8 @@ ng build --configuration=production
 - Afficher le calcul de la solution meme si elle est n'est pas égal a 66 #Done
 - Vérifier que la solution n'éxiste pas déjà dans la base de donnée avant de la sauvegarder #Done
 - Afficher message d'erreur si la solution existe déjà dans la base de donnée
+- Dockeriser le projet
+- Héberger en ligne
 
 
 ## Base de données
