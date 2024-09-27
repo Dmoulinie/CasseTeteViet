@@ -114,9 +114,17 @@
 
 
   <!--   Actions   -->
-  <div class="actions-casse-tete flex-row">
+  <div class="actions-casse-tete flex-row" *ngIf="!isEditing; else editing">
     <button ngbTooltip="Efface le contenu des cases" class="btn btn-danger" (click)="resetCalcul()">Réinitialiser</button>
     <button ngbTooltip="Sauvegarde la solution actuelle" class="btn btn-primary" (click)="saveSolution()">Sauvegarder</button>
   </div>
+
+  <ng-template #editing>
+      <p class="fs-5 fw-bold ">Modification de la solution {{this.solutionEditingId}}</p>
+    <div class="actions-casse-tete flex-row">
+      <button ngbTooltip="Annule la modification" class="btn btn-danger" (click)="cancelEdit()">Annuler</button>
+      <button ngbTooltip="Valide la modification" class="btn btn-primary" (click)="editSolution()">Modifier</button>
+    </div>
+  </ng-template>
 </div>
 

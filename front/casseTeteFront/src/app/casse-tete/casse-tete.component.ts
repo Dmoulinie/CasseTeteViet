@@ -31,15 +31,23 @@ export class CasseTeteComponent {
       if(this.receivedData[1] === 'showSolution') {
         this.showSolution(this.receivedData[0]);
       }
+
+      if (this.receivedData[1] === 'editSolution') {
+        this.showSolution(this.receivedData[0]);
+        this.solutionEditingId = this.receivedData[0].id;
+        this.isEditing = true;
+      }
     });
   }
 
-
-
+  solutionEditingId: number = 0;
+  isEditing: boolean = false;
   values: (number | null)[] = Array(9).fill(null); // Array to hold 9 values
   resultEquation: string = ''; // Variable to hold the result equation
   isvalid:boolean = false;
   areTwoValuesEqual: boolean = false;
+
+
 
   // Validate the input
   validateInput(event: Event): void {
@@ -124,15 +132,16 @@ export class CasseTeteComponent {
     this.values = [A, B, C, D, E, F, G, H, I];
     const elements = document.querySelectorAll('input');
 
-    (document.getElementById('1') as HTMLInputElement).value = A.toString(); // First case
-    (document.getElementById('5') as HTMLInputElement).value = E.toString(); // Fifth case
-    (document.getElementById('6') as HTMLInputElement).value = F.toString(); // Sixth case
-    (document.getElementById('2') as HTMLInputElement).value = B.toString(); // Second case
-    (document.getElementById('4') as HTMLInputElement).value = D.toString(); // Fourth case
-    (document.getElementById('7') as HTMLInputElement).value = G.toString(); // Seventh case
-    (document.getElementById('9') as HTMLInputElement).value = I.toString(); // Ninth case
-    (document.getElementById('3') as HTMLInputElement).value = C.toString(); // Third case
-    (document.getElementById('8') as HTMLInputElement).value = H.toString(); // Eighth case
+    // Les inputs sont créer par ligne et non par colonne donc on doit les assigner manuellement
+    (document.getElementById('1') as HTMLInputElement).value = A.toString(); // Première case
+    (document.getElementById('5') as HTMLInputElement).value = E.toString(); // Cinquième case
+    (document.getElementById('6') as HTMLInputElement).value = F.toString(); // Sixième case
+    (document.getElementById('2') as HTMLInputElement).value = B.toString(); // Deuxième case
+    (document.getElementById('4') as HTMLInputElement).value = D.toString(); // Quatrième case
+    (document.getElementById('7') as HTMLInputElement).value = G.toString(); // Septième case
+    (document.getElementById('9') as HTMLInputElement).value = I.toString(); // Neuvième case
+    (document.getElementById('3') as HTMLInputElement).value = C.toString(); // Troisième case
+    (document.getElementById('8') as HTMLInputElement).value = H.toString(); // Huitième case
     this.onComplete();
   }
 
@@ -148,6 +157,26 @@ export class CasseTeteComponent {
         this.dataSolutionsService.sendData([newSolution, 'addSolutionToList']); // Envoyer la solution à la liste des solutions pour l'ajouter coté client
       });
     });
+  }
+
+
+  editSolution(): void {
+    if (this.values.some(value => value === null)) { // Si le tableau est incomplet
+      return;
+    }
+    const [A, B, C, D, E, F, G, H, I] = this.values; // Récupérer les valeurs
+    const editedSolution = new Solution(this.solutionEditingId, `[${A}, ${B}, ${C}, ${D}, ${E}, ${F}, ${G}, ${H}, ${I}]`, new Date(), this.isvalid ? 'correct' : 'incorrect');
+    this.apiService.updateSolution(this.solutionEditingId,editedSolution).subscribe((response: any) => {
+      this.dataSolutionsService.sendData([editedSolution, 'editSolutionInList']); // Envoyer la solution à la liste des solutions pour l'éditer coté client
+    });
+    this.isEditing = false; // Sortir du mode édition
+  }
+
+  cancelEdit(): void {
+    this.isEditing = false;
+    this.solutionEditingId = 0;
+    this.resetCalcul();
+    this.dataSolutionsService.sendData([this.solutionEditingId, 'cancelEdit']); // Envoyer un message pour annuler l'édition
   }
 
 
