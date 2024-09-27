@@ -87,7 +87,17 @@ Voici les endpoints disponibles pour interagir avec l'application :
 - **DELETE** `/api/solutions/delete/all`: Supprime toutes les solutions enregistrées.  
   **Retourne:** Code 200 OK.
 
+## Build du projet
 
+
+### Back-end
+```bash
+./mvnw clean package
+```
+### Front-end
+```bash
+ng build --configuration=production
+```
 ## Todo
 
 - Quand tout supprimer, et tout générer il faut repartir de 0 (id)
